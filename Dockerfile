@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+FROM mcr.microsoft.com/dotnet/framework/sdk:4.8.1-windowsservercore-ltsc2022
 
 WORKDIR /actions-runner
 
@@ -6,7 +6,7 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPrefe
 
 RUN Invoke-WebRequest -Uri https://github.com/actions/runner/releases/download/v2.299.1/actions-runner-win-x64-2.299.1.zip -OutFile actions-runner-win-x64-2.299.1.zip
 
-RUN if((Get-FileHash -Path actions-runner-win-x64-2.299.1.zip -Algorithm SHA256).Hash.ToUpper() -ne 'F7940B16451D6352C38066005F3EE6688B53971FCC20E4726C7907B32BFDF539'){ throw 'Computed checksum did not match' }
+RUN if((Get-FileHash -Path actions-runner-win-x64-2.299.1.zip -Algorithm SHA256).Hash.ToUpper() -ne 'f7940b16451d6352c38066005f3ee6688b53971fcc20e4726c7907b32bfdf539'){ throw 'Computed checksum did not match' }
 
 RUN Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory('actions-runner-win-x64-2.299.1.zip', $PWD)
 
