@@ -18,12 +18,8 @@ jobs:
     strategy:
       max-parallel: 2
       matrix:
-        os: [windows-2019, windows-2022]
+        os: [windows-2022]
         include:
-        - os: windows-2019
-          file: Dockerfile.windows
-          tag: ltsc2019
-          base: 4.8-windowsservercore-ltsc2019
         - os: windows-2022
           file: Dockerfile.windows
           tag: ltsc2022
