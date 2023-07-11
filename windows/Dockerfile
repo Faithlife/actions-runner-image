@@ -31,7 +31,7 @@ WORKDIR /actions-runner
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
 
 # install a font as per https://techcommunity.microsoft.com/t5/itops-talk-blog/adding-optional-font-packages-to-windows-containers/bc-p/3561988#messageview_0
-RUN Invoke-WebRequest $env:TIMES_TTF_URL -outfile times.ttf; `
+RUN Invoke-WebRequest -Uri "$env:TIMES_TTF_URL" -OutFile times.ttf; `
    copy-item times.ttf c:\windows\fonts\; `
    Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -name 'Times New Roman' -value 'times.ttf' -type STRING; `
    Remove-Item times.ttf;
