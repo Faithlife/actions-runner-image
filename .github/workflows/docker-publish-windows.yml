@@ -50,6 +50,8 @@ jobs:
         run: |
           docker build . --pull --tag ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:${{ matrix.tag }} --build-arg BASE=${{ matrix.base }}
         working-directory: windows
+        env:
+          TIMES_TTF_URL: ${{ secrets.TIMES_TTF_URL }}
 
       - name: Push Docker image
         run: |
