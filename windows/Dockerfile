@@ -1,5 +1,6 @@
 # escape=`
 
+ARG TIMES_TTF_URL
 ARG BASE
 FROM mcr.microsoft.com/dotnet/framework/sdk:${BASE}
 
