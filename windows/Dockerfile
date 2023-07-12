@@ -1,6 +1,5 @@
 # escape=`
 
-ARG TIMES_TTF_URL
 ARG BASE
 FROM mcr.microsoft.com/dotnet/framework/sdk:${BASE}
 
@@ -32,7 +31,8 @@ WORKDIR /actions-runner
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
 
 # install a font as per https://techcommunity.microsoft.com/t5/itops-talk-blog/adding-optional-font-packages-to-windows-containers/bc-p/3561988#messageview_0
-RUN Invoke-WebRequest -Uri "${TIMES_TTF_URL}" -OutFile times.ttf; `
+ARG TIMES_TTF_URL
+RUN Invoke-WebRequest -Uri "$env:TIMES_TTF_URL" -OutFile times.ttf; `
    copy-item times.ttf c:\windows\fonts\; `
    Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -name 'Times New Roman' -value 'times.ttf' -type STRING; `
    Remove-Item times.ttf;
