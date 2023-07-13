@@ -31,11 +31,11 @@ WORKDIR /actions-runner
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
 
 # install a font as per https://techcommunity.microsoft.com/t5/itops-talk-blog/adding-optional-font-packages-to-windows-containers/bc-p/3561988#messageview_0
-ARG TIMES_TTF_URL
-RUN Invoke-WebRequest -Uri "$env:TIMES_TTF_URL" -OutFile times.ttf; `
-   copy-item times.ttf c:\windows\fonts\; `
-   Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -name 'Times New Roman' -value 'times.ttf' -type STRING; `
-   Remove-Item times.ttf;
+ARG ARIAL_TTF_URL
+RUN Invoke-WebRequest -Uri "$env:ARIAL_TTF_URL" -OutFile arial.ttf; `
+   copy-item arial.ttf c:\windows\fonts\; `
+   Set-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' -name 'Arial' -value 'arial.ttf' -type STRING; `
+   Remove-Item arial.ttf;
 
 RUN Invoke-WebRequest -Uri "https://github.com/actions/runner/releases/download/v$env:RUNNER_VERSION/actions-runner-win-x64-$env:RUNNER_VERSION.zip" -OutFile "actions-runner-win-x64-$env:RUNNER_VERSION.zip"
 

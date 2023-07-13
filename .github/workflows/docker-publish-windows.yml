@@ -48,7 +48,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build . --pull --tag ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:${{ matrix.tag }} --build-arg BASE=${{ matrix.base }} --build-arg TIMES_TTF_URL=${{ secrets.TIMES_TTF_URL }}
+          docker build . --pull --tag ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:${{ matrix.tag }} --build-arg BASE=${{ matrix.base }} --build-arg ARIAL_TTF_URL=${{ secrets.ARIAL_TTF_URL }}
         working-directory: windows
 
       - name: Push Docker image
