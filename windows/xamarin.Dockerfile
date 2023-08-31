@@ -5,6 +5,9 @@ FROM ghcr.io/faithlife/actions-runner-image:${BASE}
 
 SHELL [ "cmd.exe", "/S", "/C" ]
 
+COPY Install-CodeQL.ps1 .
+RUN powershell.exe -ExecutionPolicy Bypass -File Install-CodeQL.ps1
+
 # Modify VS to add Xamarin Build Tools
 RUN `
     curl -fSLo vs_BuildTools.exe https://aka.ms/vs/17/release/vs_BuildTools.exe `
