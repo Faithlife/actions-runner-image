@@ -19,6 +19,7 @@ RUN `
         --add Microsoft.VisualStudio.Workload.VCTools ^ `
         --add Microsoft.VisualStudio.Component.VC.14.30.17.0.x86.x64 ^ `
         --add Microsoft.VisualStudio.Component.VC.14.30.17.0.ATL ^ `
+        --add Microsoft.VisualStudio.Component.Windows10SDK.19041 ^ `
         --quiet --includeRecommended --norestart --nocache --wait `
     && powershell -Command "if ($err = dir $Env:TEMP -Filter dd_setup_*_errors.log | where Length -gt 0 | Get-Content) { throw $err }" `
     && del vs_BuildTools.exe `
