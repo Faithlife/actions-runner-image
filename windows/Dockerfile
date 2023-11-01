@@ -17,6 +17,7 @@ RUN `
     && start /w vs_BuildTools modify ^ `
         --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\2022\BuildTools" ^ `
         --add Microsoft.VisualStudio.Workload.VCTools ^ `
+        --add Microsoft.VisualStudio.Component.VC.ATL ^ `
         --add Microsoft.VisualStudio.Component.VC.14.30.17.0.x86.x64 ^ `
         --add Microsoft.VisualStudio.Component.VC.14.30.17.0.ATL ^ `
         --add Microsoft.VisualStudio.Component.Windows10SDK.19041 ^ `
