@@ -30,6 +30,14 @@ RUN `
     && (for %i in ("%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\*") do if not "%~nxi" == "vswhere.exe" del "%~i") `
     && powershell Remove-Item -Force -Recurse "%TEMP%\*"
 
+# Install supported .NET SDKs
+RUN `
+    curl -fSLO https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.ps1 `
+    && powershell .\dotnet-install.ps1 -Channel 6.0 `
+    && powershell .\dotnet-install.ps1 -Channel 7.0 `
+    && powershell .\dotnet-install.ps1 -Channel 8.0 `
+    && del dotnet-install.ps1
+
 WORKDIR /actions-runner
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
