@@ -14,4 +14,4 @@ RUN sudo apt-get update \
 
 COPY docker-system-prune /etc/arc/hooks/job-completed.d/
 
-ENV DOTNET_INSTALL_DIR=~/.dotnet
+ENV DOTNET_INSTALL_DIR=/home/runner/.dotnet
