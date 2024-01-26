@@ -1,6 +1,7 @@
 name: Docker (Windows)
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '0 9 * * 3'
   push:
