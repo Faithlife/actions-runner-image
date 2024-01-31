@@ -33,9 +33,9 @@ RUN `
 # Install supported .NET SDKs
 RUN `
     curl -fSLO https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.ps1 `
-    && powershell .\dotnet-install.ps1 -Channel 6.0 `
-    && powershell .\dotnet-install.ps1 -Channel 7.0 `
-    && powershell .\dotnet-install.ps1 -Channel 8.0 `
+    && powershell .\dotnet-install.ps1 -Channel 6.0 -InstallDir "\"C:\Program Files\dotnet\\"" `
+    && powershell .\dotnet-install.ps1 -Channel 7.0 -InstallDir "\"C:\Program Files\dotnet\\"" `
+    && powershell .\dotnet-install.ps1 -Channel 8.0 -InstallDir "\"C:\Program Files\dotnet\\"" `
     && del dotnet-install.ps1
 
 WORKDIR /actions-runner
