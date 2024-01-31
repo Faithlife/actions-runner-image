@@ -53,6 +53,7 @@ jobs:
         working-directory: windows
 
       - name: Push Docker image
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           docker push ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:${{ matrix.tag }}
         working-directory: windows
@@ -63,6 +64,7 @@ jobs:
         working-directory: windows
 
       - name: Push Xamarin Docker image
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           docker push ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:${{ matrix.tag }}-xamarin
         working-directory: windows
