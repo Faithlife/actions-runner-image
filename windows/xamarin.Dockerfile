@@ -24,6 +24,6 @@ RUN `
 ENV JAVA_HOME C:\Program Files (x86)\Android\openjdk\jdk-17.0.8.101-hotspot
 COPY ["android-sdk-license", "C:\\Program Files (x86)\\Android\\android-sdk\\licenses\\android-sdk-license"]
 COPY ["yes.txt", "C:\\yes.txt"]
-RUN C:\Program^ Files^ ^(x86^)\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat --licenses < C:\yes.txt
+RUN C:\Program^ Files^ ^(x86^)\Android\android-sdk\cmdline-tools\latest\bin\sdkmanager.bat --licenses < C:\yes.txt
 
-RUN C:\Program^ Files^ ^(x86^)\Android\android-sdk\cmdline-tools\7.0\bin\sdkmanager.bat --install "platforms;android-28" "platforms;android-34" --sdk_root="C:\Program Files (x86)\Android\android-sdk"
+RUN C:\Program^ Files^ ^(x86^)\Android\android-sdk\cmdline-tools\latest\bin\sdkmanager.bat --install "platforms;android-28" "platforms;android-34" --sdk_root="C:\Program Files (x86)\Android\android-sdk"
