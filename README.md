@@ -10,6 +10,7 @@ This image is based on `summerwind/actions-runner:ubuntu-22.04` (which installs 
 
 * az CLI
 * PowerShell
+* gh CLI
 
 ### Windows
 
