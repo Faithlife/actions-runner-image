@@ -13,7 +13,7 @@ This image is based on `summerwind/actions-runner:ubuntu-22.04` (which installs 
 
 ### Windows
 
-* Tags: `ltsc2019`, `ltsc2022`
+* Tags: `ltsc2022`
 
 The Windows Dockerfile was derived from the [instructions](https://github.com/actions-runner-controller/actions-runner-controller/blob/master/docs/detailed-docs.md#setting-up-windows-runners) and the example in [this PR](https://github.com/isarkis/actions-runner-controller/pull/1/files).
 It is based on the `mcr.microsoft.com/dotnet/framework/sdk` image. It adds:
