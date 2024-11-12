@@ -26,4 +26,4 @@ COPY ["android-sdk-license", "C:\\Program Files (x86)\\Android\\android-sdk\\lic
 COPY ["yes.txt", "C:\\yes.txt"]
 RUN C:\Program^ Files^ ^(x86^)\Android\android-sdk\cmdline-tools\11.0\\bin\sdkmanager.bat --licenses < C:\yes.txt
 
-RUN C:\Program^ Files^ ^(x86^)\Android\android-sdk\cmdline-tools\11.0\\bin\sdkmanager.bat --install "platforms;android-28" "platforms;android-34" "platforms;android-35" --sdk_root="C:\Program Files (x86)\Android\android-sdk"
+RUN C:\Program^ Files^ ^(x86^)\Android\android-sdk\cmdline-tools\11.0\\bin\sdkmanager.bat --install "platforms;android-34" "platforms;android-35" --sdk_root="C:\Program Files (x86)\Android\android-sdk"
