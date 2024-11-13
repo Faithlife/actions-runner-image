@@ -21,7 +21,7 @@ RUN `
     && powershell Remove-Item -Force -Recurse "%TEMP%\*"
 
 # Accept Android SDK licenses
-ENV JAVA_HOME C:\Program Files (x86)\Android\openjdk\jdk-17.0.8.101-hotspot
+ENV JAVA_HOME C:\Program Files (x86)\Android\openjdk\jdk-17.0.12
 COPY ["android-sdk-license", "C:\\Program Files (x86)\\Android\\android-sdk\\licenses\\android-sdk-license"]
 COPY ["yes.txt", "C:\\yes.txt"]
 RUN C:\Program^ Files^ ^(x86^)\Android\android-sdk\cmdline-tools\12.0\bin\sdkmanager.bat --licenses < C:\yes.txt
