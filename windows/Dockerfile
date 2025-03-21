@@ -42,6 +42,9 @@ WORKDIR /actions-runner
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
 
+# Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
+RUN Set-NetUDPSetting -DynamicPortRangeStartPort 49152 -DynamicPortRangeNumberOfPorts 16177
+
 # install a font as per https://techcommunity.microsoft.com/t5/itops-talk-blog/adding-optional-font-packages-to-windows-containers/bc-p/3561988#messageview_0
 ARG ARIAL_TTF_URL
 RUN Invoke-WebRequest -Uri "$env:ARIAL_TTF_URL" -OutFile arial.ttf; `
