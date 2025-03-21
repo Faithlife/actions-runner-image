@@ -1,3 +1,12 @@
 #!/usr/bin/env bash
 set -e
-docker system prune -f
+
+usage=$(df | awk '$6 ~ /\/var\/lib\/docker/ {usage=$5; gsub("%","",usage); print usage}' )
+
+echo "Current docker disk usage: $usage%"
+
+if [ -n "$usage" ] && [ "$usage" -gt 85 ]; then
+  docker system prune -af
+else
+  docker system prune -f
+fi
