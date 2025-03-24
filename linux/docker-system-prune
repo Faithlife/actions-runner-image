@@ -4,7 +4,7 @@ set -e
 docker system df
 
 # Clear unused data if image usage is above 95GB (~86% on our 125GB disks with 12.6GB OS/system overhead)
-usage=$(docker system df | awk '$1 == "Images" {usage=$4; gsub("GB","",usage); print (usage > 95.0) ? "all" : "" }')
+usage=$(docker system df | awk '$1 == "Images" && $4 ~ /GB/ {usage=$4; gsub("GB","",usage); print (usage > 95.0) ? "all" : "" }')
 
 if [ -n "$usage" ]; then
   echo "Cleaning all images"
