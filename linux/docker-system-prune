@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 set -e
 
-usage=$(df | awk '$6 ~ /\/var\/lib\/docker/ {usage=$5; gsub("%","",usage); print usage}' )
+docker system df
 
-echo "Current docker disk usage: $usage%"
+# Clear unused data if image usage is above 95GB (~86% on our 125GB disks with 12.6GB OS/system overhead)
+usage=$(docker system df | awk '$1 == "Images" {usage=$4; gsub("GB","",usage); print (usage > 95.0) ? "all" : "" }')
 
-if [ -n "$usage" ] && [ "$usage" -gt 85 ]; then
+if [ -n "$usage" ]; then
+  echo "Cleaning all images"
   docker system prune -af
 else
   docker system prune -f
