@@ -42,9 +42,6 @@ WORKDIR /actions-runner
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';$ProgressPreference='silentlyContinue';"]
 
-# Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
-RUN Set-NetUDPSetting -DynamicPortRangeStartPort 49152 -DynamicPortRangeNumberOfPorts 16177
-
 # install a font as per https://techcommunity.microsoft.com/t5/itops-talk-blog/adding-optional-font-packages-to-windows-containers/bc-p/3561988#messageview_0
 ARG ARIAL_TTF_URL
 RUN Invoke-WebRequest -Uri "$env:ARIAL_TTF_URL" -OutFile arial.ttf; `
@@ -68,4 +65,5 @@ RUN powershell choco feature enable -n allowGlobalConfirmation
 
 RUN powershell choco install azure-cli  --no-progress -y
 
-CMD [ "pwsh", "-c", "./config.cmd --name $env:RUNNER_NAME --url $env:GITHUB_URL$($env:RUNNER_ENTERPRISE ? 'enterprises/' + $env:RUNNER_ENTERPRISE : $env:RUNNER_ORG) --token $env:RUNNER_TOKEN --labels $env:RUNNER_LABELS --unattended --replace --ephemeral; ./run.cmd"]
+# Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
+CMD [ "pwsh", "-c", "netsh int ipv4 add excludedportrange udp 65330 1 persistent; ./config.cmd --name $env:RUNNER_NAME --url $env:GITHUB_URL$($env:RUNNER_ENTERPRISE ? 'enterprises/' + $env:RUNNER_ENTERPRISE : $env:RUNNER_ORG) --token $env:RUNNER_TOKEN --labels $env:RUNNER_LABELS --unattended --replace --ephemeral; ./run.cmd"]
