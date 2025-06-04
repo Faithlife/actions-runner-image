@@ -11,7 +11,6 @@ RUN sudo add-apt-repository ppa:dotnet/backports \
   && sudo apt-get update \
   && sudo apt-get install -y \
     gettext-base \
-    dotnet-sdk-6.0 \
     dotnet-sdk-8.0 \
     dotnet-sdk-9.0 \
   && sudo rm -rf /var/lib/apt/lists/*
