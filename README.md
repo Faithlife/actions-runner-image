@@ -10,6 +10,15 @@ This image is based on `summerwind/actions-runner:ubuntu-22.04` (which installs 
 
 * az CLI
 * PowerShell
+* .NET 8 SDK and .NET 9 Runtime
+
+* Tags: `ubuntu-logos`
+
+This image is based on `ghcr.io/actions/actions-runner:latest` (which installs the latest GitHub Actions Runner tools on Ubuntu 22.04). It adds:
+
+* az CLI
+* PowerShell
+* .NET 8 SDK and .NET 9 Runtime
 
 ### Windows
 
