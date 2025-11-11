@@ -35,6 +35,7 @@ RUN `
     curl -fSLO https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.ps1 `
     && powershell .\dotnet-install.ps1 -Channel 8.0 -InstallDir "\"C:\Program Files\dotnet\\"" `
     && powershell .\dotnet-install.ps1 -Channel 9.0 -InstallDir "\"C:\Program Files\dotnet\\"" `
+    && powershell .\dotnet-install.ps1 -Channel 10.0 -InstallDir "\"C:\Program Files\dotnet\\"" `
     && del dotnet-install.ps1
 
 WORKDIR /actions-runner
