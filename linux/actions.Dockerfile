@@ -13,7 +13,6 @@ RUN sudo add-apt-repository ppa:dotnet/backports \
     gettext-base \
     dotnet-sdk-8.0 \
     dotnet-runtime-9.0 \
-    dotnet-sdk-10.0 \
   && sudo rm -rf /var/lib/apt/lists/*
 
 ENV DOTNET_INSTALL_DIR=/home/runner/.dotnet
