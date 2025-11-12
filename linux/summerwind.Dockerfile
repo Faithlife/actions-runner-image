@@ -35,11 +35,26 @@ RUN sudo curl -sLO https://github.com/PowerShell/PowerShell/releases/download/v7
 RUN sudo add-apt-repository ppa:dotnet/backports \
   && sudo apt-get update \
   && sudo apt-get install -y \
+    ca-certificates \
     gettext-base \
-    dotnet-sdk-8.0 \
-    dotnet-runtime-9.0 \
+    libc6 \
+    libgcc-s1 \
+    libgssapi-krb5-2 \
+    libicu70 \
+    libssl3 \
+    libstdc++6 \
+    tzdata \
+    zlib1g \
   && sudo rm -rf /var/lib/apt/lists/*
+
+ENV DOTNET_INSTALL_DIR=/home/runner/.dotnet
+
+RUN curl -L https://dot.net/v1/dotnet-install.sh -o /home/runner/dotnet-install.sh && \
+  chmod +x /home/runner/dotnet-install.sh && \
+  /home/runner/dotnet-install.sh --install-dir $DOTNET_INSTALL_DIR --channel 8.0 && \
+  /home/runner/dotnet-install.sh --install-dir $DOTNET_INSTALL_DIR --channel 9.0 && \
+  /home/runner/dotnet-install.sh --install-dir $DOTNET_INSTALL_DIR --channel 10.0 && \
+  rm /home/runner/dotnet-install.sh
 
 COPY docker-system-prune /etc/arc/hooks/job-completed.d/
 
-ENV DOTNET_INSTALL_DIR=/home/runner/.dotnet
