@@ -40,7 +40,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build . --pull --tag ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:ltsc2022 --build-arg BASE=4.8.1-windowsservercore-ltsc2022 --build-arg ARIAL_TTF_URL=${{ secrets.ARIAL_TTF_URL }}
+          docker build . --pull --tag ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:ltsc2022 --build-arg BASE=4.8.1-20251014-windowsservercore-ltsc2022 --build-arg ARIAL_TTF_URL=${{ secrets.ARIAL_TTF_URL }}
         working-directory: windows
 
       - name: Push Docker image
