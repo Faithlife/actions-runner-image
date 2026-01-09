@@ -4,25 +4,25 @@ Actions runner images for use with [actions-runner-controller](https://github.co
 
 ### Linux
 
-* Tags: `master`
+#### Tags: `master`
 
 This image is based on `summerwind/actions-runner:ubuntu-22.04` (which installs the latest GitHub Actions Runner tools on Ubuntu 22.04). It adds:
 
 * az CLI
 * PowerShell
-* .NET 8 SDK and .NET 9 Runtime
+* .NET 8 SDK, .NET 9 SDK, .NET 10 SDK
 
-* Tags: `ubuntu-logos`
+#### Tags: `ubuntu-logos`
 
-This image is based on `ghcr.io/actions/actions-runner:latest` (which installs the latest GitHub Actions Runner tools on Ubuntu 22.04). It adds:
+This image is based on `ghcr.io/actions/actions-runner:latest` (which installs the latest GitHub Actions Runner tools on Ubuntu 24.04). It adds:
 
 * az CLI
 * PowerShell
-* .NET 8 SDK and .NET 9 Runtime
+* .NET 8 SDK, .NET 9 SDK, .NET 10 SDK
 
 ### Windows
 
-* Tags: `ltsc2022`
+#### Tags: `ltsc2022`
 
 The Windows Dockerfile was derived from the [instructions](https://github.com/actions-runner-controller/actions-runner-controller/blob/master/docs/detailed-docs.md#setting-up-windows-runners) and the example in [this PR](https://github.com/isarkis/actions-runner-controller/pull/1/files).
 It is based on the `mcr.microsoft.com/dotnet/framework/sdk` image. It adds:
