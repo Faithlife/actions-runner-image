@@ -15,8 +15,8 @@ RUN sudo add-apt-repository ppa:dotnet/backports \
     libc6 \
     libgcc-s1 \
     libgssapi-krb5-2 \
-    libicu70 \
-    libssl3 \
+    libicu74 \
+    libssl3t64 \
     libstdc++6 \
     tzdata \
     zlib1g \
