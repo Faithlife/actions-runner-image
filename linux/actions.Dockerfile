@@ -3,6 +3,14 @@ FROM ghcr.io/actions/actions-runner:latest
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash \
   && sudo rm -rf /var/lib/apt/lists/*
 
+RUN sudo mkdir -p /etc/apt/keyrings \
+  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+  && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+  && sudo apt-get update \
+  && sudo apt-get install -y gh \
+  && sudo rm -rf /var/lib/apt/lists/*
+
 RUN sudo curl -sLO https://github.com/PowerShell/PowerShell/releases/download/v7.4.12/powershell_7.4.12-1.deb_amd64.deb \
   && (sudo dpkg -i powershell_7.4.12-1.deb_amd64.deb; sudo apt-get install -f) \
   && sudo rm powershell_7.4.12-1.deb_amd64.deb
