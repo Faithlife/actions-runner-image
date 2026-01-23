@@ -17,6 +17,7 @@ This image is based on `summerwind/actions-runner:ubuntu-22.04` (which installs 
 This image is based on `ghcr.io/actions/actions-runner:latest` (which installs the latest GitHub Actions Runner tools on Ubuntu 24.04). It adds:
 
 * az CLI
+* gh CLI
 * PowerShell
 * .NET 8 SDK, .NET 9 SDK, .NET 10 SDK
 
