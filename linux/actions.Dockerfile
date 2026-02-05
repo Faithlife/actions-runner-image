@@ -64,7 +64,3 @@ RUN curl -L https://dot.net/v1/dotnet-install.sh -o /home/runner/dotnet-install.
   /home/runner/dotnet-install.sh --install-dir $DOTNET_INSTALL_DIR --channel 10.0 && \
   rm /home/runner/dotnet-install.sh && \
   sudo ln -s /home/runner/.dotnet/ /usr/share/dotnet
-
-
-
-
