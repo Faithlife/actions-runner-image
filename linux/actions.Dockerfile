@@ -1,5 +1,13 @@
 FROM ghcr.io/actions/actions-runner:latest
 
+RUN sudo mkdir -p /etc/apt/keyrings \
+  && sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc \
+  && sudo chmod a+r /etc/apt/keyrings/docker.asc \
+  && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null \
+  && sudo apt-get update \
+  && sudo apt-get install -y docker-compose-plugin \
+  && sudo rm -rf /var/lib/apt/lists/*
+
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash \
   && sudo rm -rf /var/lib/apt/lists/*
 
