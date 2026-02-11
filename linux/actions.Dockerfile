@@ -16,7 +16,7 @@ RUN sudo mkdir -p /etc/apt/keyrings \
   && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
   && sudo apt-get update \
-  && sudo apt-get install -y gh \
+  && sudo apt-get install -y gh git-lfs \
   && sudo rm -rf /var/lib/apt/lists/*
 
 RUN sudo curl -sLO https://github.com/PowerShell/PowerShell/releases/download/v7.4.12/powershell_7.4.12-1.deb_amd64.deb \

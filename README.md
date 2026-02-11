@@ -18,6 +18,7 @@ This image is based on `ghcr.io/actions/actions-runner:latest` (which installs t
 
 * az CLI
 * gh CLI
+* git-lfs
 * PowerShell
 * .NET 8 SDK, .NET 9 SDK, .NET 10 SDK
 
