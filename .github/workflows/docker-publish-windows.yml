@@ -48,39 +48,3 @@ jobs:
         run: |
           docker push ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:ltsc2022
         working-directory: windows
-
-  build-xamarin:
-    runs-on: [windows-2022]
-    needs: build-windows
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - id: image_name
-        name: Make image name lowercase
-        uses: ASzc/change-string-case-action@v6
-        with:
-          string: ${{ github.repository }}
-
-      - name: Build Docker image
-        run: |
-          docker build . -f xamarin.Dockerfile --pull --tag ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:ltsc2022-xamarin --build-arg BASE=ltsc2022
-        working-directory: windows
-
-      - name: Push Docker image
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          docker push ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:ltsc2022-xamarin
-        working-directory: windows
