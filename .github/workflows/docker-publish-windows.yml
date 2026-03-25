@@ -15,16 +15,18 @@ env:
 
 jobs:
   build-windows:
-    runs-on: [windows-2022]
     strategy:
       matrix:
         image:
           - tag: ltsc2022
+            runner: windows-2022
             dockerfile: Dockerfile
             base: 4.8.1-20251014-windowsservercore-ltsc2022
           - tag: vs2026
+            runner: windows-2025
             dockerfile: vs2026.Dockerfile
             base: 4.8.1-20251014-windowsservercore-ltsc2025
+    runs-on: ${{ matrix.image.runner }}
     permissions:
       contents: read
       packages: write
