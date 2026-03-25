@@ -1,56 +1,29 @@
 # escape=`
 
-ARG BASE=4.8.1-20251014-windowsservercore-ltsc2025
-FROM mcr.microsoft.com/dotnet/framework/runtime:${BASE}
+ARG BASE
+FROM mcr.microsoft.com/dotnet/framework/sdk:${BASE}
 
 # latest values from https://github.com/actions/runner/releases for actions-runner-win-x64-N.N.N.zip
 ARG RUNNER_VERSION=2.333.0
 ARG RUNNER_DOWNLOAD_HASH=7176d0c4b674d4108b515503a53b4bc9eeab9339c645e274a97c142fe1c64b95
 
-ENV `
-    # Do not generate certificate
-    DOTNET_GENERATE_ASPNET_CERTIFICATE=false `
-    # Enable correct mode for dotnet watch (only mode supported in a container)
-    DOTNET_USE_POLLING_FILE_WATCHER=true `
-    # NuGet version to install
-    NUGET_VERSION=7.3.0 `
-    # Install location of Roslyn
-    ROSLYN_COMPILER_LOCATION="C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\Roslyn"
-
+# VS commands adapted from https://github.com/microsoft/dotnet-framework-docker/blob/main/src/sdk/4.8.1/windowsservercore-ltsc2025/Dockerfile
 SHELL [ "cmd.exe", "/S", "/C" ]
 
-# Install NuGet CLI
-RUN mkdir "%ProgramFiles%\NuGet\latest" `
-    && curl -fSLo "%ProgramFiles%\NuGet\nuget.exe" https://dist.nuget.org/win-x86-commandline/v%NUGET_VERSION%/nuget.exe `
-    && mklink "%ProgramFiles%\NuGet\latest\nuget.exe" "%ProgramFiles%\NuGet\nuget.exe"
-
-# Install the VS18 SDK stack, then add Desktop development with C++.
-RUN curl -fSLo vs_BuildTools.exe https://aka.ms/vs/stable/vs_BuildTools.exe `
-    && start /w vs_BuildTools ^ `
+# Modify VS to add Desktop development with C++
+# https://learn.microsoft.com/en-us/visualstudio/install/workload-component-id-vs-build-tools?view=visualstudio#desktop-development-with-c
+RUN `
+  curl -fSLo vs_BuildTools.exe https://aka.ms/vs/18/stable/vs_BuildTools.exe `
+    && start /w vs_BuildTools modify ^ `
         --installPath "%ProgramFiles(x86)%\Microsoft Visual Studio\18\BuildTools" ^ `
-        --add Microsoft.Component.ClickOnce.MSBuild ^ `
-        --add Microsoft.Net.Component.4.8.1.SDK ^ `
-        --add Microsoft.NetCore.Component.Runtime.8.0 ^ `
-        --add Microsoft.NetCore.Component.Runtime.9.0 ^ `
-        --add Microsoft.NetCore.Component.Runtime.10.0 ^ `
-        --add Microsoft.NetCore.Component.SDK ^ `
-        --add Microsoft.VisualStudio.Component.NuGet.BuildTools ^ `
-        --add Microsoft.VisualStudio.Component.TestTools.BuildTools ^ `
-        --add Microsoft.VisualStudio.Component.VC.ATL ^ `
-        --add Microsoft.VisualStudio.Component.WebDeploy ^ `
-        --add Microsoft.VisualStudio.Web.BuildTools.ComponentGroup ^ `
-        --add Microsoft.VisualStudio.Workload.MSBuildTools ^ `
         --add Microsoft.VisualStudio.Workload.VCTools ^ `
+        --add Microsoft.VisualStudio.Component.VC.ATL ^ `
+        --add Microsoft.VisualStudio.Component.VC.14.44.17.14.x86.x64 ^ `
+        --add Microsoft.VisualStudio.Component.VC.14.44.17.14.ATL ^ `
+        --add Microsoft.VisualStudio.Component.Windows10SDK ^ `
         --quiet --includeRecommended --norestart --nocache --wait `
     && powershell -Command "if ($err = dir $Env:TEMP -Filter dd_setup_*_errors.log | where Length -gt 0 | Get-Content) { throw $err }" `
     && del vs_BuildTools.exe `
-    `
-    # Trigger dotnet first run experience by running arbitrary cmd
-    && "%ProgramFiles%\dotnet\dotnet" help `
-    `
-    # Workaround for issues with 64-bit ngen
-    && %windir%\Microsoft.NET\Framework64\v4.0.30319\ngen uninstall "%ProgramFiles(x86)%\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8.1 Tools\SecAnnotate.exe" `
-    && %windir%\Microsoft.NET\Framework64\v4.0.30319\ngen uninstall "%ProgramFiles(x86)%\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8.1 Tools\WinMDExp.exe" `
     `
     # ngen assemblies queued by VS installers
     && %windir%\Microsoft.NET\Framework64\v4.0.30319\ngen update `
@@ -59,29 +32,6 @@ RUN curl -fSLo vs_BuildTools.exe https://aka.ms/vs/stable/vs_BuildTools.exe `
     && (for /D %i in ("%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\*") do rmdir /S /Q "%i") `
     && (for %i in ("%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\*") do if not "%~nxi" == "vswhere.exe" del "%~i") `
     && powershell Remove-Item -Force -Recurse "%TEMP%\*"
-
-# Set PATH in one layer to keep image size down.
-RUN powershell setx /M PATH $(${Env:PATH} `
-    + \";${Env:ProgramFiles}\NuGet\" `
-    + \";${Env:ProgramFiles(x86)}\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\" `
-    + \";${Env:ProgramFiles(x86)}\Microsoft Visual Studio\18\BuildTools\Common7\IDE\Extensions\TestPlatform\" `
-    + \";${Env:ProgramFiles(x86)}\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8.1 Tools\" `
-    + \";${Env:ProgramFiles(x86)}\Microsoft SDKs\ClickOnce\SignTool\")
-
-# Install Targeting Packs
-RUN powershell -Command "`
-    $referenceAssembliesPath = \"${Env:ProgramFiles(x86)}\Reference Assemblies\Microsoft\Framework\"; `
-    New-Item -ItemType Directory -Path ${referenceAssembliesPath}; `
-    foreach ($version in @('net40', 'net45', 'net451', 'net452', 'net46', 'net461', 'net462', 'net47', 'net471', 'net472', 'net48', 'net481')) { `
-        $package = \"Microsoft.NETFramework.ReferenceAssemblies.${version}\"; `
-        nuget install \"${package}\" -DirectDownload -ExcludeVersion -Version 1.0.3 -OutputDirectory ${Env:TEMP}\Packages -Source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet-public/nuget/v3/index.json; `
-        $contents = \"${Env:TEMP}\Packages\${package}\build\.NETFramework\"; `
-        Get-ChildItem -File -Recurse -Path \"${contents}\" | `
-            Where-Object { $_.FullName -match '^(?!.*(PermissionSets|RedistList)).*\.xml$' } | `
-            Remove-Item; `
-        Copy-Item -Recurse -Force -Container -Path ${contents} -Destination ${referenceAssembliesPath}; `
-    } `
-    Remove-Item -Force -Recurse ${Env:TEMP}\\*;"
 
 # Install supported .NET SDKs
 RUN `
