@@ -21,7 +21,7 @@ jobs:
           - tag: ltsc2022
             runner: windows-2022
             dockerfile: Dockerfile
-            base: 4.8.1-windowsservercore-ltsc2022
+            base: 4.8.1-20251014-windowsservercore-ltsc2022
           # Temporarily disabled due to GitHub-hosted runner disk limits.
           # - tag: vs2026
           #   runner: windows-2025
