@@ -59,7 +59,7 @@ Then run:
 cd actions-runner-image\windows
 $env:DOCKER_BUILDKIT = '0'
 tar.exe -cf context.tar Dockerfile vs2026.Dockerfile yes.txt android-sdk-license
-Get-Content .\context.tar -AsByteStream | docker build --pull -t actions-runner-image:vs2026 -f vs2026.Dockerfile --build-arg BASE=4.8.1-windowsservercore-ltsc2025 --build-arg "ARIAL_TTF_URL=https://SECRET_VALUE_HERE" -
+Get-Content .\context.tar -AsByteStream | docker build --pull -t ghcr.io/faithlife/actions-runner-image:vs2026 -f vs2026.Dockerfile --build-arg BASE=4.8.1-windowsservercore-ltsc2025 --build-arg "ARIAL_TTF_URL=https://SECRET_VALUE_HERE" -
 del .\context.tar
 ```
 
