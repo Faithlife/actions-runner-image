@@ -50,8 +50,11 @@ jobs:
         with:
           string: ${{ github.repository }}
 
-      - name: Switch to Windows containers
-        run: '& "$Env:ProgramFiles\Docker\Docker\DockerCli.exe" -SwitchWindowsEngine'
+      - name: Start Docker service
+        run: |
+          Start-Service docker
+          Start-Sleep -Seconds 10
+          docker info
         shell: pwsh
 
       - name: Build Docker image
