@@ -65,5 +65,22 @@ RUN powershell choco feature enable -n allowGlobalConfirmation
 
 RUN powershell choco install azure-cli  --no-progress -y
 
+# Install Java 17 (required by Android SDK command-line tools)
+RUN powershell choco install microsoft-openjdk17 --no-progress -y
+
+# Install Android SDK
+# https://developer.android.com/tools (commandlinetools-win-*.zip)
+ARG ANDROID_SDK_CMDLINE_TOOLS_VERSION=11076708
+ENV ANDROID_HOME=C:\android-sdk
+ENV ANDROID_SDK_ROOT=C:\android-sdk
+ENV PATH="${PATH};C:\android-sdk\cmdline-tools\latest\bin;C:\android-sdk\platform-tools"
+RUN New-Item -ItemType Directory -Path $env:ANDROID_HOME | Out-Null; `
+    Invoke-WebRequest -Uri "https://dl.google.com/android/repository/commandlinetools-win-${env:ANDROID_SDK_CMDLINE_TOOLS_VERSION}_latest.zip" -OutFile cmdline-tools.zip; `
+    Expand-Archive cmdline-tools.zip -DestinationPath "$env:ANDROID_HOME\cmdline-tools"; `
+    Rename-Item "$env:ANDROID_HOME\cmdline-tools\cmdline-tools" "$env:ANDROID_HOME\cmdline-tools\latest"; `
+    Remove-Item cmdline-tools.zip; `
+    (1..10 | ForEach-Object { "yes" }) -join "`n" | & "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat" --sdk_root="$env:ANDROID_HOME" --licenses; `
+    & "$env:ANDROID_HOME\cmdline-tools\latest\bin\sdkmanager.bat" --sdk_root="$env:ANDROID_HOME" "platform-tools" "build-tools;36.0.0" "platforms;android-36"
+
 # Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
 CMD [ "pwsh", "-c", "netsh int ipv4 add excludedportrange udp 65330 1 persistent; ./config.cmd --name $env:RUNNER_NAME --url $env:GITHUB_URL$($env:RUNNER_ENTERPRISE ? 'enterprises/' + $env:RUNNER_ENTERPRISE : $env:RUNNER_ORG) --token $env:RUNNER_TOKEN --labels $env:RUNNER_LABELS --unattended --replace --ephemeral; ./run.cmd"]
