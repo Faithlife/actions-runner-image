@@ -50,6 +50,10 @@ jobs:
         with:
           string: ${{ github.repository }}
 
+      - name: Switch to Windows containers
+        run: '& "$Env:ProgramFiles\Docker\Docker\DockerCli.exe" -SwitchWindowsEngine'
+        shell: pwsh
+
       - name: Build Docker image
         run: |
           docker build . --pull --file ${{ matrix.image.dockerfile }} --tag ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:${{ matrix.image.tag }} --build-arg BASE=${{ matrix.image.base }} --build-arg ARIAL_TTF_URL=${{ secrets.ARIAL_TTF_URL }}
