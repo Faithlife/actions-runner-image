@@ -46,9 +46,9 @@ jobs:
 
       - id: image_name
         name: Make image name lowercase
-        uses: ASzc/change-string-case-action@v7
-        with:
-          string: ${{ github.repository }}
+        run: |
+          $imageName = '${{ github.repository }}'.ToLowerInvariant()
+          "lowercase=$imageName" >> $env:GITHUB_OUTPUT
 
       - name: Build Docker image
         run: |
