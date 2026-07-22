@@ -34,11 +34,11 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Log into registry ${{ env.REGISTRY }}
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -46,9 +46,9 @@ jobs:
 
       - id: image_name
         name: Make image name lowercase
-        uses: ASzc/change-string-case-action@v6
-        with:
-          string: ${{ github.repository }}
+        run: |
+          $imageName = '${{ github.repository }}'.ToLowerInvariant()
+          "lowercase=$imageName" >> $env:GITHUB_OUTPUT
 
       - name: Build Docker image
         run: |
