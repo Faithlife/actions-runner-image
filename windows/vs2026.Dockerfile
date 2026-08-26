@@ -4,8 +4,8 @@ ARG BASE
 FROM mcr.microsoft.com/dotnet/framework/sdk:${BASE}
 
 # latest values from https://github.com/actions/runner/releases for actions-runner-win-x64-N.N.N.zip
-ARG RUNNER_VERSION=2.336.0
-ARG RUNNER_DOWNLOAD_HASH=d59123a43003e357b0805b5d0f611d0bd2f65ab67d51bd070dd4e7a0f685c162
+ARG RUNNER_VERSION=2.337.0
+ARG RUNNER_DOWNLOAD_HASH=1150692afa94e71f872017e254ea55b6eece1eece3fe7e3a6d4c93d0a1b85cfc
 
 # VS commands adapted from https://github.com/microsoft/dotnet-framework-docker/blob/main/src/sdk/4.8.1/windowsservercore-ltsc2025/Dockerfile
 SHELL [ "cmd.exe", "/S", "/C" ]
