@@ -54,6 +54,11 @@ jobs:
           docker build . --pull --file ${{ matrix.image.dockerfile }} --tag ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:${{ matrix.image.tag }} --build-arg BASE=${{ matrix.image.base }} --build-arg ARIAL_TTF_URL=${{ secrets.ARIAL_TTF_URL }}
         working-directory: windows
 
+      - name: Validate Docker image
+        run: |
+          docker run --rm ${{ env.REGISTRY }}/${{ steps.image_name.outputs.lowercase }}:${{ matrix.image.tag }} pwsh -NoProfile -File C:\scripts\Test-Image.ps1
+        working-directory: windows
+
       - name: Push Docker image
         if: ${{ github.event_name != 'pull_request' }}
         run: |

@@ -59,11 +59,13 @@ RUN Invoke-WebRequest -Uri 'https://aka.ms/install-powershell.ps1' -OutFile inst
 
 RUN powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-RUN powershell choco install git.install --no-progress --params "'/GitAndUnixToolsOnPath'" -y
+COPY scripts C:/scripts
+
+RUN C:/scripts/Install-ChocoPackage.ps1 -Name git.install -ChocoArgs '--params', '''/GitAndUnixToolsOnPath'''
 
 RUN powershell choco feature enable -n allowGlobalConfirmation
 
-RUN powershell choco install azure-cli  --no-progress -y
+RUN C:/scripts/Install-ChocoPackage.ps1 -Name azure-cli
 
 # Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
 CMD [ "pwsh", "-c", "netsh int ipv4 add excludedportrange udp 65330 1 persistent; ./config.cmd --name $env:RUNNER_NAME --url $env:GITHUB_URL$($env:RUNNER_ENTERPRISE ? 'enterprises/' + $env:RUNNER_ENTERPRISE : $env:RUNNER_ORG) --token $env:RUNNER_TOKEN --labels $env:RUNNER_LABELS --unattended --replace --ephemeral; ./run.cmd"]

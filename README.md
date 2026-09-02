@@ -58,7 +58,7 @@ Then run:
 ```powershell
 cd actions-runner-image\windows
 $env:DOCKER_BUILDKIT = '0'
-tar.exe -cf context.tar Dockerfile vs2026.Dockerfile yes.txt android-sdk-license
+tar.exe -cf context.tar Dockerfile vs2026.Dockerfile yes.txt android-sdk-license scripts
 Get-Content .\context.tar -AsByteStream | docker build --pull -t ghcr.io/faithlife/actions-runner-image:vs2026 -f vs2026.Dockerfile --build-arg BASE=4.8.1-windowsservercore-ltsc2025 --build-arg "ARIAL_TTF_URL=https://SECRET_VALUE_HERE" -
 del .\context.tar
 ```
@@ -67,4 +67,17 @@ The steps above avoid the following error that may occur when just running `dock
 
 ```
 unable to prepare context: unable to evaluate symlinks in context path: EvalSymlinks: too many links
+```
+
+#### Validating Images
+
+Chocolatey packages are installed with `windows/scripts/Install-ChocoPackage.ps1`, which retries transient
+failures and fails the build if the package still can't be installed.
+
+`windows/scripts/Test-Image.ps1` is copied into the images and verifies that the runner, PowerShell,
+Chocolatey, Git, the Azure CLI, the .NET SDKs, the Arial font, and the Visual C++ tools are all present and
+working. It runs in CI after each Windows image is built, and can be run against a local image with:
+
+```powershell
+docker run --rm ghcr.io/faithlife/actions-runner-image:vs2026 pwsh -NoProfile -File C:\scripts\Test-Image.ps1
 ```
