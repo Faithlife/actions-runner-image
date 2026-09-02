@@ -59,12 +59,14 @@ RUN Invoke-WebRequest -Uri 'https://aka.ms/install-powershell.ps1' -OutFile inst
 
 RUN powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-RUN powershell choco install git.install --no-progress --params "'/GitAndUnixToolsOnPath'" -y
+RUN powershell $validExitCodes = @(0, 1641, 3010); choco install git.install --no-progress --params "'/GitAndUnixToolsOnPath'" -y; `
+    if ($validExitCodes -notcontains $LASTEXITCODE) { throw "Failed to install git.install via Chocolatey (exit code $LASTEXITCODE)." }; `
+    if (-not (choco list --local-only --exact git.install | Select-String '^git.install ' -Quiet)) { throw "Chocolatey did not report git.install as installed." }
 
 RUN powershell choco feature enable -n allowGlobalConfirmation
 
-RUN powershell choco install azure-cli --no-progress -y; `
-    if ($LASTEXITCODE -ne 0) { throw "Failed to install azure-cli via Chocolatey (exit code $LASTEXITCODE)." }; `
+RUN powershell $validExitCodes = @(0, 1641, 3010); choco install azure-cli --no-progress -y; `
+    if ($validExitCodes -notcontains $LASTEXITCODE) { throw "Failed to install azure-cli via Chocolatey (exit code $LASTEXITCODE)." }; `
     if (-not (choco list --local-only --exact azure-cli | Select-String '^azure-cli ' -Quiet)) { throw "Chocolatey did not report azure-cli as installed." }
 
 # Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
