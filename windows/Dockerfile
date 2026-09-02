@@ -63,7 +63,9 @@ RUN powershell choco install git.install --no-progress --params "'/GitAndUnixToo
 
 RUN powershell choco feature enable -n allowGlobalConfirmation
 
-RUN powershell choco install azure-cli  --no-progress -y
+RUN powershell choco install azure-cli --no-progress -y; `
+    if ($LASTEXITCODE -ne 0) { throw "Failed to install azure-cli via Chocolatey (exit code $LASTEXITCODE)." }; `
+    if (-not (choco list --local-only --exact azure-cli | Select-String '^azure-cli ' -Quiet)) { throw "Chocolatey did not report azure-cli as installed." }
 
 # Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
 CMD [ "pwsh", "-c", "netsh int ipv4 add excludedportrange udp 65330 1 persistent; ./config.cmd --name $env:RUNNER_NAME --url $env:GITHUB_URL$($env:RUNNER_ENTERPRISE ? 'enterprises/' + $env:RUNNER_ENTERPRISE : $env:RUNNER_ORG) --token $env:RUNNER_TOKEN --labels $env:RUNNER_LABELS --unattended --replace --ephemeral; ./run.cmd"]
