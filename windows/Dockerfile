@@ -59,11 +59,15 @@ RUN Invoke-WebRequest -Uri 'https://aka.ms/install-powershell.ps1' -OutFile inst
 
 RUN powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-RUN powershell choco install git.install --no-progress --params "'/GitAndUnixToolsOnPath'" -y
+RUN $validExitCodes = @(0, 1641, 3010); choco install git.install --no-progress --params "'/GitAndUnixToolsOnPath'" -y; `
+    if ($validExitCodes -notcontains $LASTEXITCODE) { throw "Failed to install git.install via Chocolatey (exit code $LASTEXITCODE)." }; `
+    if (-not (choco list git.install --exact | Select-String '^git.install ' -Quiet)) { throw "Chocolatey did not report git.install as installed." }
 
 RUN powershell choco feature enable -n allowGlobalConfirmation
 
-RUN powershell choco install azure-cli  --no-progress -y
+RUN $validExitCodes = @(0, 1641, 3010); choco install azure-cli --no-progress -y; `
+    if ($validExitCodes -notcontains $LASTEXITCODE) { throw "Failed to install azure-cli via Chocolatey (exit code $LASTEXITCODE)." }; `
+    if (-not (choco list azure-cli --exact | Select-String '^azure-cli ' -Quiet)) { throw "Chocolatey did not report azure-cli as installed." }
 
 # Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
 CMD [ "pwsh", "-c", "netsh int ipv4 add excludedportrange udp 65330 1 persistent; ./config.cmd --name $env:RUNNER_NAME --url $env:GITHUB_URL$($env:RUNNER_ENTERPRISE ? 'enterprises/' + $env:RUNNER_ENTERPRISE : $env:RUNNER_ORG) --token $env:RUNNER_TOKEN --labels $env:RUNNER_LABELS --unattended --replace --ephemeral; ./run.cmd"]
