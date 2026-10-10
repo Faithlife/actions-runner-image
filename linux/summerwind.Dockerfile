@@ -28,6 +28,11 @@ RUN export ARCH=$(echo ${TARGETPLATFORM} | cut -d / -f2) \
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash \
   && sudo rm -rf /var/lib/apt/lists/*
 
+RUN curl -fsSLo /tmp/bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64 \
+  && sudo install -o root -g root -m 755 /tmp/bicep /usr/local/bin/bicep \
+  && rm /tmp/bicep \
+  && bicep --version
+
 RUN sudo curl -sLO https://github.com/PowerShell/PowerShell/releases/download/v7.4.12/powershell_7.4.12-1.deb_amd64.deb \
   && (sudo dpkg -i powershell_7.4.12-1.deb_amd64.deb; sudo apt-get install -f) \
   && sudo rm powershell_7.4.12-1.deb_amd64.deb

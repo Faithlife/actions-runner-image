@@ -11,6 +11,11 @@ RUN sudo mkdir -p /etc/apt/keyrings \
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash \
   && sudo rm -rf /var/lib/apt/lists/*
 
+RUN curl -fsSLo /tmp/bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64 \
+  && sudo install -o root -g root -m 755 /tmp/bicep /usr/local/bin/bicep \
+  && rm /tmp/bicep \
+  && bicep --version
+
 RUN sudo mkdir -p /etc/apt/keyrings \
   && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
   && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
