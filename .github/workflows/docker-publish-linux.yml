@@ -24,6 +24,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 
+jobs:
   build-actions:
 
     runs-on: ubuntu-latest
