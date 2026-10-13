@@ -44,6 +44,7 @@ RUN sudo add-apt-repository ppa:dotnet/backports \
   && sudo rm -rf /var/lib/apt/lists/*
 
 ENV DOTNET_INSTALL_DIR=/home/runner/.dotnet
+ENV PATH="${DOTNET_INSTALL_DIR}:${PATH}"
 
 RUN curl -L https://dot.net/v1/dotnet-install.sh -o /home/runner/dotnet-install.sh && \
   chmod +x /home/runner/dotnet-install.sh && \
