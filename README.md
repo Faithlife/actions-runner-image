@@ -24,6 +24,7 @@ It is based on the `mcr.microsoft.com/dotnet/framework/sdk` image. It adds:
 
 * [GitHub Actions Runner](https://github.com/actions/runner)
 * [Azure CLI](https://community.chocolatey.org/packages/azure-cli)
+* [GitHub CLI](https://community.chocolatey.org/packages/gh)
 * [Git for Windows](https://community.chocolatey.org/packages/git.install)
 * [Visual C++ Tools](https://learn.microsoft.com/en-us/visualstudio/install/workload-component-id-vs-build-tools?view=vs-2022#desktop-development-with-c)
 * [zstd](https://community.chocolatey.org/packages/zstandard)
@@ -35,6 +36,7 @@ The `windows/vs2026.Dockerfile` image starts from the .NET Framework 4.8.1 LTSC 
 * [GitHub Actions Runner](https://github.com/actions/runner)
 * [PowerShell](https://learn.microsoft.com/powershell/)
 * [Azure CLI](https://community.chocolatey.org/packages/azure-cli)
+* [GitHub CLI](https://community.chocolatey.org/packages/gh)
 * [Git for Windows](https://community.chocolatey.org/packages/git.install)
 * [.NET 8 SDK, .NET 9 SDK, .NET 10 SDK](https://dotnet.microsoft.com/)
 * [Visual C++ Tools](https://learn.microsoft.com/visualstudio/install/workload-component-id-vs-build-tools?view=visualstudio#desktop-development-with-c++)

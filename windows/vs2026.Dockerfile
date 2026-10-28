@@ -73,5 +73,12 @@ RUN $validExitCodes = @(0, 1641, 3010); choco install zstandard --no-progress -y
     if ($validExitCodes -notcontains $LASTEXITCODE) { throw "Failed to install zstandard via Chocolatey (exit code $LASTEXITCODE)." }; `
     if (-not (choco list zstandard --exact | Select-String '^zstandard ' -Quiet)) { throw "Chocolatey did not report zstandard as installed." }
 
+RUN $validExitCodes = @(0, 1641, 3010); choco install gh --no-progress -y; `
+    if ($validExitCodes -notcontains $LASTEXITCODE) { throw "Failed to install gh via Chocolatey (exit code $LASTEXITCODE)." }; `
+    if (-not (choco list gh --exact | Select-String '^gh ' -Quiet)) { throw "Chocolatey did not report gh as installed." }
+
+RUN Get-Command gh -CommandType Application | Out-Null; gh --version; `
+    if ($LASTEXITCODE -ne 0) { throw "GitHub CLI failed to run (exit code $LASTEXITCODE)." }
+
 # Disable dynamic port UDP/65330; Azure DNS resolution can fail once every 16,383 attempts using the default `NetUDPSetting`s.
 CMD [ "pwsh", "-c", "netsh int ipv4 add excludedportrange udp 65330 1 persistent; ./config.cmd --name $env:RUNNER_NAME --url $env:GITHUB_URL$($env:RUNNER_ENTERPRISE ? 'enterprises/' + $env:RUNNER_ENTERPRISE : $env:RUNNER_ORG) --token $env:RUNNER_TOKEN --labels $env:RUNNER_LABELS --unattended --replace --ephemeral; ./run.cmd"]
